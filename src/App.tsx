@@ -64,7 +64,8 @@ function App() {
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {sidebarCollapsed ? '\u25B6' : '\u25C0'}
+          <span className="toggle-desktop">{sidebarCollapsed ? '\u25B6' : '\u25C0'}</span>
+          <span className="toggle-mobile">{sidebarCollapsed ? '\u25B2' : '\u25BC'}</span>
         </button>
         {!sidebarCollapsed && (
           <Sidebar

@@ -42,6 +42,14 @@
   background: rgba(137, 180, 250, 0.15);
 }
 
+.toggle-mobile { display: none; }
+.toggle-desktop { display: inline; }
+
+@media (max-width: 768px) {
+  .toggle-mobile { display: inline; }
+  .toggle-desktop { display: none; }
+}
+
 .app-canvas {
   flex: 1;
   background: #f0f0f0;
@@ -590,4 +598,81 @@ input.full-width:focus {
 
 .toolbar-spacer {
   flex: 1;
+}
+
+/* ========== Mobile Layout ========== */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column-reverse;
+  }
+
+  .app-sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-height: 55vh;
+    border-top: 2px solid #313244;
+  }
+
+  .app-sidebar.collapsed {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-height: 40px;
+  }
+
+  .sidebar-toggle {
+    right: 50%;
+    transform: translateX(50%);
+    top: -28px;
+    background: #1e1e2e;
+    border: 1px solid #313244;
+    border-radius: 8px 8px 0 0;
+    padding: 2px 20px;
+    z-index: 20;
+  }
+
+  .app-canvas {
+    flex: 1;
+    min-height: 40vh;
+  }
+
+  .sidebar-header h1 {
+    font-size: 13px;
+  }
+
+  .tab-btn {
+    padding: 8px 2px;
+  }
+
+  .tab-label {
+    font-size: 9px;
+  }
+
+  .form-row {
+    font-size: 12px;
+  }
+
+  .form-row input[type="number"],
+  .form-row input[type="text"],
+  .form-row select {
+    width: 100px;
+    font-size: 12px;
+  }
+
+  .preset-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .preset-btn {
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+
+  .canvas-toolbar {
+    padding: 6px 8px;
+  }
+
+  .canvas-toolbar button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 }
