@@ -1,0 +1,73 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: ['claude/cable-cross-section-app-UnrB2', 'main']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web app for Android
+        run: BUILD_TARGET=android npm run build
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Rename APK
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk cable-cross-section-designer.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cable-designer-apk
+          path: cable-cross-section-designer.apk
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/claude/cable-cross-section-app-UnrB2' || github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0-${{ github.run_number }}
+          name: Cable Designer APK (Build ${{ github.run_number }})
+          body: |
+            ## Cable Cross-Section Designer - Android APK
+
+            Download `cable-cross-section-designer.apk` below and install on your Android phone.
+
+            **Installation:**
+            1. Download the APK file on your phone
+            2. Open it and tap "Install" (you may need to enable "Install from unknown sources" in Settings)
+            3. Open the app from your home screen
+          files: cable-cross-section-designer.apk
+          draft: false
+          prerelease: false
